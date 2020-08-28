@@ -38,7 +38,7 @@ git clone https://github.com/MURDriverless/mur_common --branch develop
 
 Then install the `teleop_twist_keyboard` for controlling the robot movement.
 ```
-sudo apt-get install ros-noetic-teleop-twist-keyboard
+sudo apt-get install ros-melodic-teleop-twist-keyboard
 ```
 
 Build the packages at your `catkin_ws`.
