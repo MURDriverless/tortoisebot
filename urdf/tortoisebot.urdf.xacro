@@ -2,6 +2,15 @@
 <!-- <robot name="tortoisebot"> -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="tortoisebot">
 
+    <xacro:property name="cameraSize" value="0.05"/>
+    <xacro:property name="cameraMass" value="0.1"/>
+    <xacro:property name="cameraHeight" value="0.5"/>
+    <xacro:property name="cameraBaseline" value="0.15"/>
+
+    <material name="Orange">
+        <color rgba="${255/255} ${108/255} ${10/255} 1.0"/>
+    </material>
+
     <!-- This will be the main body of the tortoise bot -->
     <link name="base_link">
         <visual>
@@ -40,6 +49,7 @@
             <inertia ixx="0.00083" iyy="0.00083" izz="0.000167" ixy="0" ixz="0" iyz="0" />
         </inertial>
     </link>
+
     <!-- Define joint between front caster and main body -->
     <joint name="front_caster_joint" type="continuous">
         <axis xyz="0 0 1" />
@@ -126,10 +136,10 @@
     </joint>
 
     <!-- Mount Ouster OS1-64 LiDAR -->
-    <xacro:include filename="$(find ouster_description)/urdf/OS1-64.urdf.xacro" />
+    <!-- <xacro:include filename="$(find ouster_description)/urdf/OS1-64.urdf.xacro" />
     <OS1-64 parent="base_link" name="os1_sensor" hz="10" samples="512">
         <origin xyz="0 0 0.3" rpy="0 0 0" />
-    </OS1-64>
+    </OS1-64> -->
 
     <!-- Load differential drive plugin -->
     <gazebo>
@@ -141,5 +151,99 @@
             <wheelDiameter>0.07</wheelDiameter>
             <publishWheelJointState>true</publishWheelJointState>
         </plugin>
+    </gazebo>
+
+    <!-- Define stereo camera link and joint -->
+    <link name="camera">
+        <collision>
+            <origin xyz="0 0 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="${cameraSize} ${cameraSize} ${cameraSize}"/>
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="${cameraSize} ${cameraSize} ${cameraSize}"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+
+        <inertial>
+            <mass value="${cameraMass}" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <box_inertia m="${cameraMass}" x="${cameraSize}" y="${cameraSize}" z="${cameraSize}" />
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+        </inertial>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+        <axis xyz="0 1 0" />
+        <origin xyz=".2 0 ${cameraHeight}" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="camera"/>
+    </joint>
+
+    <!-- Stereo Camera -->
+    <gazebo reference="camera">
+        <material>Gazebo/Orange</material>
+        <sensor type="multicamera" name="stereo_camera">
+            <update_rate>30.0</update_rate>
+
+            <camera name="left">
+                <horizontal_fov>1.13</horizontal_fov>
+                <image>
+                    <width>1920</width>
+                    <height>1200</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.02</near>
+                    <far>300</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.007</stddev>
+                </noise>
+            </camera>
+
+            <camera name="right">
+                <pose>0 -${cameraBaseline} 0 0 0 0</pose>
+                <horizontal_fov>1.13</horizontal_fov>
+                <image>
+                    <width>1920</width>
+                    <height>1200</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.02</near>
+                    <far>300</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.007</stddev>
+                </noise>
+            </camera>
+
+            <plugin name="stereo_camera_controller" filename="libgazebo_ros_multicamera.so">
+                <alwaysOn>true</alwaysOn>
+                <updateRate>0.0</updateRate>
+                <cameraName>multisense_sl/camera</cameraName>
+                <imageTopicName>image_raw</imageTopicName>
+                <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+                <frameName>left_camera_optical_frame</frameName>
+                <!--<rightFrameName>right_camera_optical_frame</rightFrameName>-->
+                <hackBaseline>${cameraBaseline}</hackBaseline>
+                <distortionK1>0.0</distortionK1>
+                <distortionK2>0.0</distortionK2>
+                <distortionK3>0.0</distortionK3>
+                <distortionT1>0.0</distortionT1>
+                <distortionT2>0.0</distortionT2>
+                <visualize>true</visualize>
+            </plugin>
+        </sensor>
     </gazebo>
 </robot>
