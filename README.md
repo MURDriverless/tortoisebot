@@ -41,6 +41,11 @@ Then install the `teleop_twist_keyboard` for controlling the robot movement.
 sudo apt-get install ros-melodic-teleop-twist-keyboard
 ```
 
+Install tf2 sensor messages.
+```
+sudo apt-get install ros-melodic-tf2-sensor-msgs
+```
+
 
 For best performance, set the cmake argument as follows before calling `catkin build`.
 ```
