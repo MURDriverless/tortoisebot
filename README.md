@@ -1,6 +1,6 @@
 # TortoiseBot
 
-This repository contains a simple Gazebo robot with differential drive plugin which has a Ouster OS1-64 LiDAR mounted on it. 
+This repository contains a simple Gazebo robot with differential drive plugin which has a Ouster OS1-64 LiDAR mounted on it.
 
 ## Dependencies & Setup
 
@@ -39,6 +39,12 @@ git clone https://github.com/MURDriverless/mur_common --branch develop
 Then install the `teleop_twist_keyboard` for controlling the robot movement.
 ```
 sudo apt-get install ros-melodic-teleop-twist-keyboard
+```
+
+
+For best performance, set the cmake argument as follows before calling `catkin build`.
+```
+catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 
 Build the packages at your `catkin_ws`.
