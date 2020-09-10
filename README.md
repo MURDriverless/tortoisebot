@@ -29,7 +29,7 @@ git clone https://gitlab.com/eufs/eufs_sim # then checkout 263cba59f3be6bf46bd3e
 
 Get the following if you would like to test the LiDAR pipeline.
 ```
-git clone https://github.com/MURDriverless/lidar_dev --branch task-262-lidar-sim
+git clone https://github.com/MURDriverless/lidar_dev --branch dev/lidar-tortoise
 git clone https://github.com/MURDriverless/linefit_ground_segmentation
 git clone https://github.com/catkin/catkin_simple
 git clone https://github.com/ethz-asl/glog_catkin.git
