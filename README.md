@@ -23,8 +23,8 @@ git clone https://github.com/MURDriverless/tortoisebot --branch task-179-detect-
 git clone https://github.com/MURDriverless/ouster_example
 git clone https://github.com/tu-darmstadt-ros-pkg/hector_gazebo
 
-git clone https://gitlab.com/eufs/eufs_msgs
-git clone https://gitlab.com/eufs/eufs_sim
+git clone https://gitlab.com/eufs/eufs_msgs # then checkout 17c173f811dec53ff68ba05ed6104ddbca9ab79c
+git clone https://gitlab.com/eufs/eufs_sim # then checkout 263cba59f3be6bf46bd3e3d410a76e57f323f516
 ```
 
 Get the following if you would like to test the LiDAR pipeline.
@@ -34,6 +34,11 @@ git clone https://github.com/MURDriverless/linefit_ground_segmentation
 git clone https://github.com/catkin/catkin_simple
 git clone https://github.com/ethz-asl/glog_catkin.git
 git clone https://github.com/MURDriverless/mur_common --branch develop
+```
+
+Install ackermann-msgs package.
+```
+sudo apt install ros-melodic-ackermann-msgs
 ```
 
 Then install the `teleop_twist_keyboard` for controlling the robot movement.
